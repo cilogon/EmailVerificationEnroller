@@ -71,7 +71,9 @@
       <constraint>REFERENCES cm_co_enrollment_flow_wedges(id)</constraint>
     </field>
     <field name="verification_code" type="C" size="40" />
-    <field name="mail" type="C" size="256" />
+    <field name="email_address_id" type="I">
+      <constraint>REFERENCES cm_email_addresses(id)</constraint>
+    </field>
     <field name="attempts_count" type="I"/>
     <field name="co_petition_id" type="I">
       <constraint>REFERENCES cm_co_petitions(id)</constraint>

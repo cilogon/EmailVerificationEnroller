@@ -89,7 +89,7 @@ if($this->action != 'view') {
       <?php
       $attrs = array();
       $attrs['value'] = isset($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_template_id'])
-                        ? $vv_message_templates[$email_verification_enrollers[0]['EmailVerificationEnroller']['verification_template_id']]
+                        ? $email_verification_enrollers[0]['EmailVerificationEnroller']['verification_template_id']
                         : "";
       $attrs['empty'] = false;
 

@@ -33,8 +33,8 @@ global $cm_lang, $cm_texts;
 
 $cm_email_verification_enroller_texts['en_US'] = array(
   // Titles, per-controller
-  'ct.email_verification_enrollers.1'               => 'Email Verficiation Enroller',
-  'ct.email_verification_enrollers.pl'              => 'Email Verficiation Enrollers',
+  'ct.email_verification_enrollers.1'               => 'Email Verificiation Enroller',
+  'ct.email_verification_enrollers.pl'              => 'Email Verificiation Enrollers',
 
   // Error texts
   'er.verification_request.db.save'                 => 'Failed to save Verification Request',
@@ -43,7 +43,7 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   // Fields
   'fd.email_verification_enrollers.msg.templ'       => 'Message Template',
   'fd.email_verification_enrollers.msg.templ.desc'  => 'Select the Verification Message Template to send to the Enrollee',
-  'fd.email_verification_enrollers.code.len'        => 'Verficiation Code Length',
+  'fd.email_verification_enrollers.code.len'        => 'Verificiation Code Length',
   'fd.email_verification_enrollers.code.len.desc'   => 'Set the verification code length. Minimum/Default length is 8. Maximum is 20. Length step is 4.',
 
   // Actions

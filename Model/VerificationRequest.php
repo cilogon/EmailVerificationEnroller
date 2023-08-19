@@ -33,7 +33,15 @@ class VerificationRequest extends AppModel {
   public $belongsTo = array(
     "EmailVerificationEnroller.EmailVerificationEnroller",
     "CoEnrollmentFlowWedge",
-    "CoPetition"
+    "CoPetition".
+    "EmailAddress"
+  );
+
+  // Document foreign keys
+  public $cmPluginHasMany = array(
+    "CoPetition" => array("VerificationRequest"),
+    "CoEnrollmentFlowWedge" => array("VerificationRequest"),
+    "EmailAddress" => array("VerificationRequest")
   );
 
   // Validation rules for table elements
@@ -58,8 +66,8 @@ class VerificationRequest extends AppModel {
       'required' => false,
       'allowEmpty' => true
     ),
-    'mail' => array(
-      'rule' => 'email',
+    'email_address_id' => array(
+      'rule' => 'numeric',
       'required' => true,
       'allowEmpty' => false
     ),
@@ -77,8 +85,8 @@ class VerificationRequest extends AppModel {
         'message' => array('Code length must not exceed 20 characters.'),
         'last' => 'true',
       ),
-      'mimLength' => array(
-        'rule' => array('mimLength', 9),
+      'minLength' => array(
+        'rule' => array('minLength', 9),
         'required' => true,
         'allowEmpty' => false,
         'message' => array('Code length must not be less than 8 characters.'),
