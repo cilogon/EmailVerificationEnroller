@@ -1,11 +1,13 @@
 .card {
-    width: 350px;
     padding: 10px;
     border-radius: 20px;
     background: #fff;
     border: none;
-    height: 350px;
     position: relative;
+}
+
+.mt-n12 {
+    margin-top: -6rem !important;
 }
 
 .container {

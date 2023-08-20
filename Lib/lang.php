@@ -53,4 +53,8 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'pl.email_verification_enrollers.authz'                => 'authorization level not supported',
   'pl.email_verification_enrollers.appr.req'             => 'not supported if approval is required',
   'pl.email_verification_enrollers.verif.review'         => 'not supported if verification mode is not review',
+
+  // Verify Request
+  'pl.verification_request.verify.title'      => 'Please Verify your Email Address',
+  'pl.verification_request.verify.mail'       => 'Enter the code we just send on your emai address <b class="text-danger">%1$s</b>',
 );

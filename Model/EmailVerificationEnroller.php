@@ -98,6 +98,25 @@ class EmailVerificationEnroller extends AppModel {
         'message' => array('Code length must not exceed 20 characters.'),
         'last' => 'true',
       ),
+      'step_four' => array(
+        'rule' => array('increaseStep', 4),
+        'required' => false,
+        'allowEmpty' => true,
+        'message' => array('Code length must be increase by 4 characters, e.g. 8, 12, 16, 20.'),
+        'last' => 'true',
+      )
     )
   );
+
+  /**
+   * Determine if the string length can be divided by $num_of_chars.
+   *
+   * @since  COmanage Registry v4.3.0
+   * @param array  $check        Array of fields to validate
+   * @param int    $num_of_chars Length multiplier
+   * @return bool
+   */
+  public function increaseStep($check, $num_of_chars) {
+    return (int)$check["verification_code_length"]%$num_of_chars == 0;
+  }
 }

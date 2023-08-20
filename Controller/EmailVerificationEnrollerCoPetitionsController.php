@@ -35,7 +35,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     "CoPetition",
     "EmailVerificationEnroller.EmailVerificationEnroller",
     "CoMessageTemplate",
-    "VerificationRequest"
+    "EmailVerificationEnroller.VerificationRequest"
   );
 
   /**
@@ -139,8 +139,10 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     }
 
 
+    $is_post = false;
     // We have a verification request for this petition that waits to be served
     if ($this->request->is('post')) {
+      $is_post = true;
       if(empty($email_verification_enroller['VerificationRequest'])) {
         // Something is wrong. We can not have a post request without a record waiting
         $this->redirect($onFinish);
@@ -206,6 +208,14 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
                                         : _txt('fd.enrollee.new'))));
     }
 
+    $this->set('vv_to_email', $toEmail);
+
+    // If we do not come from a post but we just refresh the page we need to skip the rest of the code
+    if(!empty($email_verification_enroller["VerificationRequest"])
+       && !$is_post) {
+      return;
+    }
+
     $verification_code = generateRandomToken($email_verification_enroller['EmailVerificationEnroller']["verification_code_length"] ?? 8);
 
     // Generate additional substitutions to supplement those handled by CoInvites.
@@ -225,15 +235,30 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       'co_enrollment_flow_wedge_id' => $email_verification_enroller['EmailVerificationEnroller']['co_enrollment_flow_wedge_id'],
       'email_verification_enroller_id' => $email_verification_enroller['EmailVerificationEnroller']['id'],
       "co_petition_id" => $id,
-      'verification_code' => $verification_code,
       'email_address_id' => $toEmail['id'],
       'attempts_count' => 1,
+      'verification_code' => $verification_code,
     );
 
     $this->VerificationRequest->clear();
-    if(!$this->VerificationRequest->save($data)) {
-      $this->log(__METHOD__ . "::invalid_fields::message" . print_r($this->VerificationRequest->invalidFields(), true), LOG_ERROR);
-      throw new RuntimeException(_txt('er.verification_request.db.save'));
+
+    if(!empty($email_verification_enroller["VerificationRequest"])) {
+      $this->VerificationRequest->id = $email_verification_enroller["VerificationRequest"][0]['id'];
+      $attemps = $this->VerificationRequest->field('attemps_count');
+
+      if($attemps > 2) {
+        // TODO: We exceeded the three attemps. Do something
+      }
+
+      $this->VerificationRequest->updateAll(
+        array('VerificationRequest.attempts_count' => ($attemps + 1)),
+        array('VerificationRequest.verification_code' => $verification_code)
+      );
+    } else {
+      if(!$this->VerificationRequest->save($data)) {
+        $this->log(__METHOD__ . "::invalid_fields::message" . print_r($this->VerificationRequest->invalidFields(), true), LOG_ERROR);
+        throw new RuntimeException(_txt('er.verification_request.db.save'));
+      }
     }
 
     // Sent the email
