@@ -35,7 +35,8 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     "CoPetition",
     "EmailVerificationEnroller.EmailVerificationEnroller",
     "CoMessageTemplate",
-    "EmailVerificationEnroller.VerificationRequest"
+    "EmailVerificationEnroller.VerificationRequest",
+    "EmailAddress"
   );
 
   /**
@@ -84,9 +85,12 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       throw new InvalidArgumentException(_txt('er.notfound', array(_txt('ct.co_petitions.1'), $id)));
     }
 
+    $efwid = $this->viewVars['vv_efwid'] ?? $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["co_enrollment_flow_wedge_id"];
+    $this->set('vv_efwid', $efwid);
+
     // Check the Wedge configuration
     $args = array();
-    $args['conditions']['EmailVerificationEnroller.co_enrollment_flow_wedge_id'] = $this->viewVars['vv_efwid'];
+    $args['conditions']['EmailVerificationEnroller.co_enrollment_flow_wedge_id'] = $efwid;
     $args['contain'] = array(
       'CoEnrollmentFlowVerMessageTemplate',
       'CoEnrollmentFlowWedge',
@@ -145,19 +149,54 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       $is_post = true;
       if(empty($email_verification_enroller['VerificationRequest'])) {
         // Something is wrong. We can not have a post request without a record waiting
-        $this->redirect($onFinish);
+        // todo: Where should i redirect to?
+        $this->redirect("/");
       }
 
-      // Start a transaction
       // Check the code
+      $verification_code_request = implode("-", $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["verification_code"]);
 
-      // Verify the email
+      // The verification code does not match
+      // Create a Flash, send a new code and retry
+      if($email_verification_enroller["VerificationRequest"][0]["verification_code"] == $verification_code_request) {
+        // Start a transaction
+        $dbc = $this->EmailVerificationEnroller->getDataSource();
+        $dbc->begin();
 
-      // Delete the verfication code from the database
-      // Close the transaction
+        try {
+          // Verify the email
+          $this->EmailAddress->id = $email_verification_enroller["VerificationRequest"][0]["email_address_id"];
+          $this->EmailAddress->verify($pt["EnrolleeOrgIdentity"]["id"],
+                                      $pt["EnrolleeCoPerson"]["id"],
+                                      $this->EmailAddress->field('mail'),
+                                      $pt["EnrolleeCoPerson"]["id"]);
 
-      // todo: Redirect after the email confirmation.
-      $this->redirect($onFinish);
+          // Delete the verification code record from the database
+          $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
+
+          // We need to trick the CoPetition->updateStatus since it only allows transitioning
+          // to Confirmed if we are coming from PendingConfirmation
+          $this->CoPetition->id = $id;
+          $this->CoPetition->saveField("status", PetitionStatusEnum::PendingConfirmation);
+
+          // Update the status of the petition to Confirmed
+          $this->CoPetition->updateStatus($id,
+                                          PetitionStatusEnum::Confirmed,
+                                          $pt["EnrolleeCoPerson"]["id"],
+                                          __METHOD__);
+
+          $dbc->commit();
+
+          // Redirect after the confirmation step
+          $this->redirect($this->generateDoneRedirect('processConfirmation', $id));
+        } catch (Exception $e) {
+          $dbc->rollback();
+          $this->log(__METHOD__ . "::message " . _txt('er.db.save'), LOG_ERROR);
+          throw new InternalErrorException(_txt('er.db.save'));
+        }
+      } else {
+        $this->Flash->set(_txt('er.verification_request.code.validation'), array('key' => 'error'));
+      }
     }
 
     // GET Request
@@ -210,7 +249,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
     $this->set('vv_to_email', $toEmail);
 
-    // If we do not come from a post but we just refresh the page we need to skip the rest of the code
+    // XXX If we do not come from a post but we just refresh the page we need to skip the rest of the code
     if(!empty($email_verification_enroller["VerificationRequest"])
        && !$is_post) {
       return;
@@ -244,21 +283,21 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
     if(!empty($email_verification_enroller["VerificationRequest"])) {
       $this->VerificationRequest->id = $email_verification_enroller["VerificationRequest"][0]['id'];
-      $attemps = $this->VerificationRequest->field('attemps_count');
+      $attemps = $this->VerificationRequest->field('attempts_count');
 
       if($attemps > 2) {
-        // TODO: We exceeded the three attemps. Do something
+        $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
+
+        // For now redirect to home
+        $this->redirect("/");
       }
 
-      $this->VerificationRequest->updateAll(
-        array('VerificationRequest.attempts_count' => ($attemps + 1)),
-        array('VerificationRequest.verification_code' => $verification_code)
-      );
-    } else {
-      if(!$this->VerificationRequest->save($data)) {
-        $this->log(__METHOD__ . "::invalid_fields::message" . print_r($this->VerificationRequest->invalidFields(), true), LOG_ERROR);
-        throw new RuntimeException(_txt('er.verification_request.db.save'));
-      }
+      $data['attempts_count'] = $attemps + 1;
+    }
+
+    if(!$this->VerificationRequest->save($data)) {
+      $this->log(__METHOD__ . "::invalid_fields::message" . print_r($this->VerificationRequest->invalidFields(), true), LOG_ERROR);
+      throw new RuntimeException(_txt('er.verification_request.db.save'));
     }
 
     // Sent the email

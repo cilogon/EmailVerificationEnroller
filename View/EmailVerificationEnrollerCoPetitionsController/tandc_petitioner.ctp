@@ -67,16 +67,19 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
             $options['class'] .= 'focusFirst';
           }
 
-          if($i > 0 && $i < $code_parts) {
+          if($i > 0) {
             print $this->Html->tag('span', '-', array('class' => 'mx-2'));
           }
 
-          print $this->Form->input('code.' . $i, $options);
+          print $this->Form->input( $req . '.verification_code.' . $i, $options);
         }
       ?>
     </div>
     <div class="text-center mt-5">
-      <?php print $this->Form->submit($submit_label); ?>
+      <?php
+      print $this->Form->submit($submit_label);
+      print $this->Form->end();
+      ?>
 <!--      <span class="d-block mobile-text">Don't receive the code?</span>-->
 <!--      <span class="font-weight-bold text-danger cursor">Resend</span>-->
     </div>

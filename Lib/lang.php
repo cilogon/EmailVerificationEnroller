@@ -38,6 +38,8 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
   // Error texts
   'er.verification_request.db.save'                 => 'Failed to save Verification Request',
+  'er.verification_request.code.validation'         => 'Verification Code does not match',
+  'er.verification_request.max.attempts'            => 'Max verification attempts exceeded',
 
 
   // Fields
