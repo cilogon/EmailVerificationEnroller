@@ -286,6 +286,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       $attemps = $this->VerificationRequest->field('attempts_count');
 
       if($attemps > 2) {
+        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
         $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
 
         // For now redirect to home
