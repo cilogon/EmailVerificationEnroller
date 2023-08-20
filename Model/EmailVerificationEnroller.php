@@ -41,7 +41,8 @@ class EmailVerificationEnroller extends AppModel {
   );
 
   // Add behaviors
-  public $actsAs = array('Containable', 'Changelog' => array('priority' => 5));
+  public $actsAs = array('Containable',
+                         'Changelog' => array('priority' => 5));
 
   // Association rules from this model to other models
   public $belongsTo = array(
@@ -53,9 +54,9 @@ class EmailVerificationEnroller extends AppModel {
     ),
   );
 
-//  public $hasMany = array(
-//    "EmailVerficationEnroller.VerificationRequest" => array('dependent' => true)
-//  );
+  public $hasMany = array(
+    "EmailVerificationEnroller.VerificationRequest" => array('dependent' => true)
+  );
 
   // Default display field for cake generated views
   public $displayField = "co_enrollment_flow_wedge_id";

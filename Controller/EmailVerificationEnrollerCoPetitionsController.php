@@ -34,7 +34,8 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
   public $uses = array(
     "CoPetition",
     "EmailVerificationEnroller.EmailVerificationEnroller",
-    "CoMessageTemplate"
+    "CoMessageTemplate",
+    "VerificationRequest"
   );
 
   /**
@@ -51,7 +52,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
   }
 
   /**
-   * Plugin functionality following sendConfirmation step
+   * Plugin functionality following tandcPetitioner step
    * We just send the Confirmation Email with the token. We want to interact with the user
    * presenting a form where s/he will add the code we just sent.
    *
@@ -59,7 +60,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
    * @param   Array    $onFinish  URL, in Cake format
    */
 
-  protected function execute_plugin_sendConfirmation($id, $onFinish) {
+  protected function execute_plugin_tandcPetitioner($id, $onFinish) {
     // Just let any exceptions fall through
 
     $args = array();
@@ -76,7 +77,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       'PrimaryName'
     );
 
-    $pt = $this->find('first', $args);
+    $pt = $this->CoPetition->find('first', $args);
 
     // The petition does not exist
     if(empty($pt)) {
@@ -87,6 +88,8 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     $args = array();
     $args['conditions']['EmailVerificationEnroller.co_enrollment_flow_wedge_id'] = $this->viewVars['vv_efwid'];
     $args['contain'] = array(
+      'CoEnrollmentFlowVerMessageTemplate',
+      'CoEnrollmentFlowWedge',
       'VerificationRequest' => array(
         "conditions" => array(
           'VerificationRequest.deleted IS NOT TRUE',
@@ -117,7 +120,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     // Should we continue or abort due to unsupported configuration
 
     // Email verification is not required
-    if (!$ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
+    if ($ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
       $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.verification.not.req'), LOG_DEBUG);
       $this->redirect($onFinish);
     }
@@ -148,7 +151,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
       // Verify the email
 
-      // Delete the code
+      // Delete the verfication code from the database
       // Close the transaction
 
       // todo: Redirect after the email confirmation.
@@ -223,18 +226,19 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       'email_verification_enroller_id' => $email_verification_enroller['EmailVerificationEnroller']['id'],
       "co_petition_id" => $id,
       'verification_code' => $verification_code,
-      'mail' => $toEmail,
+      'email_address_id' => $toEmail['id'],
       'attempts_count' => 1,
     );
 
     $this->VerificationRequest->clear();
     if(!$this->VerificationRequest->save($data)) {
+      $this->log(__METHOD__ . "::invalid_fields::message" . print_r($this->VerificationRequest->invalidFields(), true), LOG_ERROR);
       throw new RuntimeException(_txt('er.verification_request.db.save'));
     }
 
     // Sent the email
     $this->CoMessageTemplate->templateSend($email_verification_enroller['EmailVerificationEnroller']["verification_template_id"],
-                                           $toEmail,
+                                           $toEmail['mail'],
                                            $subs);
 
 
