@@ -153,6 +153,20 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
         $this->redirect("/");
       }
 
+      // Validity time window
+      $validity_time_window = (int)($email_verification_enroller['EmailVerificationEnroller']['verification_validity'] ?? 480);
+      $creation_date = new DateTime($email_verification_enroller["VerificationRequest"][0]["created"]);
+      $nowdate = new DateTime();
+      $timediff = $creation_date->diff($nowdate);
+      $validityMinutes = $timediff->i;   // On PHP < 5.4, this could be -99999 on error
+      if($validityMinutes > $validity_time_window) {
+        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
+        $this->Flash->set(_txt('er.verification_request.validity.exc'), array('key' => 'error'));
+
+        // For now redirect to home
+        $this->redirect("/");
+      }
+
       // Check the code
       $verification_code_request = implode("-", $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["verification_code"]);
 

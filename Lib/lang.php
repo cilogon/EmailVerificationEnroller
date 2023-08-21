@@ -40,13 +40,16 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'er.verification_request.db.save'                 => 'Failed to save Verification Request',
   'er.verification_request.code.validation'         => 'Verification Code does not match',
   'er.verification_request.max.attempts'            => 'Max verification attempts exceeded',
+  'er.verification_request.validity.exc'            => 'Verification Validity time window exceeded',
 
 
   // Fields
-  'fd.email_verification_enrollers.msg.templ'       => 'Message Template',
-  'fd.email_verification_enrollers.msg.templ.desc'  => 'Select the Verification Message Template to send to the Enrollee',
   'fd.email_verification_enrollers.code.len'        => 'Verificiation Code Length',
   'fd.email_verification_enrollers.code.len.desc'   => 'Set the verification code length. Minimum/Default length is 8. Maximum is 20. Length step is 4.',
+  'fd.email_verification_enrollers.msg.templ'       => 'Message Template',
+  'fd.email_verification_enrollers.msg.templ.desc'  => 'Select the Verification Message Template to send to the Enrollee',
+  'fd.email_verification_enrollers.validity'        => 'Verification Validity (Minutes)',
+  'fd.email_verification_enrollers.validity.desc'   => 'When confirming an email address, the length of time (in minutes) the confirmation code is valid for (default is 8 hours = 480 minutes)',
 
   // Actions
 
