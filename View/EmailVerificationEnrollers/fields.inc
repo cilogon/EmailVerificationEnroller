@@ -120,6 +120,19 @@ if($this->action != 'view') {
         : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_length'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
     </div>
   </li>
+  <li>
+    <div class="field-name">
+      <div class="field-title">
+        <?php print ($e ? $this->Form->label('verification_validity', _txt('fd.email_verification_enrollers.validity')) : _txt('fd.email_verification_enrollers.validity')); ?>
+      </div>
+      <div class="field-desc"><?php print _txt('fd.email_verification_enrollers.validity.desc'); ?></div>
+    </div>
+    <div class="field-info">
+      <?php print ($e
+        ? $this->Form->input('verification_validity', array('type' => 'number'))
+        : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_validity'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
+    </div>
+  </li>
   <?php if($e): ?>
     <li class="fields-submit">
       <div class="field-name">

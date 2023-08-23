@@ -77,6 +77,13 @@ class EmailVerificationEnroller extends AppModel {
         'allowEmpty' => true
       )
     ),
+    'verification_validity' => array(
+      'content' => array(
+        'rule' => 'numeric',
+        'required' => false,
+        'allowEmpty' => true
+      )
+    ),
     'verification_code_length' => array(
       'content' => array(
         'rule' => 'numeric',

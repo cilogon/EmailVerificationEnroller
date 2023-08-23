@@ -124,10 +124,10 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     // Should we continue or abort due to unsupported configuration
 
     // Email verification is not required
-    if ($ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
-      $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.verification.not.req'), LOG_DEBUG);
-      $this->redirect($onFinish);
-    }
+//    if ($ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
+//      $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.verification.not.req'), LOG_DEBUG);
+//      $this->redirect($onFinish);
+//    }
 
     // Enrollment Authorization level is not supported
     $supported_authz_levels = array(EnrollmentAuthzEnum::AuthUser, EnrollmentAuthzEnum::None);
@@ -153,6 +153,20 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
         $this->redirect("/");
       }
 
+      // Validity time window
+      $validity_time_window = (int)($email_verification_enroller['EmailVerificationEnroller']['verification_validity'] ?? 480);
+      $creation_date = new DateTime($email_verification_enroller["VerificationRequest"][0]["created"]);
+      $nowdate = new DateTime();
+      $timediff = $creation_date->diff($nowdate);
+      $validityMinutes = $timediff->i;   // On PHP < 5.4, this could be -99999 on error
+      if($validityMinutes > $validity_time_window) {
+        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
+        $this->Flash->set(_txt('er.verification_request.validity.exc'), array('key' => 'error'));
+
+        // For now redirect to home
+        $this->redirect("/");
+      }
+
       // Check the code
       $verification_code_request = implode("-", $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["verification_code"]);
 
@@ -174,21 +188,22 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
           // Delete the verification code record from the database
           $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
 
-          // We need to trick the CoPetition->updateStatus since it only allows transitioning
-          // to Confirmed if we are coming from PendingConfirmation
-          $this->CoPetition->id = $id;
-          $this->CoPetition->saveField("status", PetitionStatusEnum::PendingConfirmation);
-
-          // Update the status of the petition to Confirmed
-          $this->CoPetition->updateStatus($id,
-                                          PetitionStatusEnum::Confirmed,
-                                          $pt["EnrolleeCoPerson"]["id"],
-                                          __METHOD__);
+//          // We need to trick the CoPetition->updateStatus since it only allows transitioning
+//          // to Confirmed if we are coming from PendingConfirmation
+//          $this->CoPetition->id = $id;
+//          $this->CoPetition->saveField("status", PetitionStatusEnum::PendingConfirmation);
+//
+//          // Update the status of the petition to Confirmed
+//          $this->CoPetition->updateStatus($id,
+//                                          PetitionStatusEnum::Confirmed,
+//                                          $pt["EnrolleeCoPerson"]["id"],
+//                                          __METHOD__);
 
           $dbc->commit();
 
-          // Redirect after the confirmation step
-          $this->redirect($this->generateDoneRedirect('processConfirmation', $id));
+          // Continue
+          $this->redirect($this->generateDoneRedirect('tandcPetitioner', $id, $efwid));
+//          $this->redirect($onFinish);
         } catch (Exception $e) {
           $dbc->rollback();
           $this->log(__METHOD__ . "::message " . _txt('er.db.save'), LOG_ERROR);
@@ -286,6 +301,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       $attemps = $this->VerificationRequest->field('attempts_count');
 
       if($attemps > 2) {
+        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
         $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
 
         // For now redirect to home
