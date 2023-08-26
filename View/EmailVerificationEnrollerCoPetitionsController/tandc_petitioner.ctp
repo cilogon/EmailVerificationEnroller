@@ -27,6 +27,7 @@
 
 
 $this->Html->css('EmailVerificationEnroller.tandc_petitioner', array('inline' => false));
+$this->Html->script('EmailVerificationEnroller.timer', array('inline' => false));
 
 
 $model = $this->name;
@@ -48,11 +49,41 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 
 ?>
 
-<div class="d-flex justify-content-center align-items-center container mt-n12">
-  <div class="card py-5 px-3">
+<script type="text/javascript">
+  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 0.5?>;
+
+  $(document).ready(function() {
+    $("#verification-code-submit").on("click", function() {
+      $("#verification-code-card").addClass('d-none');
+      appendTimerToDocument(seconds)
+      startTimer(seconds, seconds)
+    })
+  });
+
+  window.onload = function() {
+    if(seconds > 1) {
+      appendTimerToDocument(seconds)
+      startTimer(seconds, seconds)
+    }
+    setTimeout(() => {
+      // i should hide the boxes here and present the spinner by default
+      $("#app-timer").hide()
+      $("#verification-code-card").show();
+    }, seconds*1000);
+  }
+
+</script>
+
+<div id="verification-code-container" class="d-flex justify-content-center align-items-center container mt-n12">
+  <div id="app-timer" class="display: none"></div>
+  <div id="verification-code-card"
+       class="card py-5 px-3"
+       style="display: none">
     <h5 class="m-0 text-center"><?php print _txt('pl.verification_request.verify.title');?></h5>
     <span class="mobile-text"><?php print _txt('pl.verification_request.verify.mail', array($vv_to_email["mail"]));?></span>
-    <div class="d-flex flex-row mt-5 justify-content-center">
+    <span class="mobile-text"><?php print _txt('fd.email_verification_enrollers.verification.attemp', array((int)($vv_verification_request[0]['attempts_count'] ?? 0)));?></span>
+    <div id="verification-code-input"
+         class="d-flex flex-row mt-5 justify-content-center">
       <?php
         $code_parts = (int)$vv_email_verification_enroller["verification_code_length"]/4;
 
@@ -71,11 +102,13 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
             print $this->Html->tag('span', '-', array('class' => 'mx-2'));
           }
 
+          print $this->Form->label( $req . '.verification_code.' . $i, "verification code part", array("class" => "visually-hidden"));
           print $this->Form->input( $req . '.verification_code.' . $i, $options);
         }
       ?>
     </div>
-    <div class="text-center mt-5">
+    <div id="verification-code-submit"
+         class="text-center mt-5">
       <?php
       print $this->Form->submit($submit_label);
       print $this->Form->end();
