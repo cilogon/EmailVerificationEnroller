@@ -123,6 +123,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
     // Should we continue or abort due to unsupported configuration
 
+    // Todo: When to fire. on none???
     // Email verification is not required
 //    if ($ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
 //      $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.verification.not.req'), LOG_DEBUG);
@@ -299,14 +300,14 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     if(!empty($email_verification_enroller["VerificationRequest"])) {
       $this->VerificationRequest->id = $email_verification_enroller["VerificationRequest"][0]['id'];
       $attemps = $this->VerificationRequest->field('attempts_count');
-
-      if($attemps > 2) {
-        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
-        $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
-
-        // For now redirect to home
-        $this->redirect("/");
-      }
+//
+//      if($attemps > 2) {
+//        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
+//        $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
+//
+//        // For now redirect to home
+//        $this->redirect("/");
+//      }
 
       $data['attempts_count'] = $attemps + 1;
     }
