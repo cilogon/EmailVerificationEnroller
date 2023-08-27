@@ -204,7 +204,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
           // Continue
           $this->redirect($this->generateDoneRedirect('tandcPetitioner', $id, $efwid));
-//          $this->redirect($onFinish);
         } catch (Exception $e) {
           $dbc->rollback();
           $this->log(__METHOD__ . "::message " . _txt('er.db.save'), LOG_ERROR);

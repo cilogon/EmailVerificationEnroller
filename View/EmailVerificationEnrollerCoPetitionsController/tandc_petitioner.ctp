@@ -53,15 +53,7 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
   const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 0.5?>;
 
   $(document).ready(function() {
-    $("#verification-code-submit").on("click", function() {
-      $("#verification-code-card").addClass('d-none');
-      appendTimerToDocument(seconds)
-      startTimer(seconds, seconds)
-    })
-  });
-
-  window.onload = function() {
-    if(seconds > 1) {
+    if(seconds > 0.5) {
       appendTimerToDocument(seconds)
       startTimer(seconds, seconds)
     }
@@ -70,7 +62,13 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       $("#app-timer").hide()
       $("#verification-code-card").show();
     }, seconds*1000);
-  }
+
+    $("#verification-code-submit").on("click", function() {
+      $("#verification-code-card").addClass('d-none');
+      appendTimerToDocument(seconds)
+      startTimer(seconds, seconds)
+    })
+  });
 
 </script>
 
