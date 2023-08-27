@@ -1,24 +1,25 @@
 const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 10;
-const ALERT_THRESHOLD = 5;
+// the numbers are percents
+const WARNING_THRESHOLD = 0.5;
+const INFO_THRESHOLD = 0.25;
 
 const COLOR_CODES = {
   info: {
-    color: "green"
+    color: "green",
+    threshold: INFO_THRESHOLD
   },
   warning: {
     color: "orange",
     threshold: WARNING_THRESHOLD
   },
   alert: {
-    color: "red",
-    threshold: ALERT_THRESHOLD
+    color: "red"
   }
 };
 
 let timePassed = 0;
 let timerInterval = null;
-let remainingPathColor = COLOR_CODES.info.color;
+let remainingPathColor = COLOR_CODES.alert.color;
 
 function appendTimerToDocument(timeLeft) {
   document.getElementById("app-timer").innerHTML = `
@@ -58,7 +59,7 @@ function startTimer(timeLimit, timeLeft) {
       timeLeft
     );
     setCircleDasharray(timeLimit, timeLeft);
-    setRemainingPathColor(timeLeft);
+    setRemainingPathColor(timeLimit, timeLeft);
 
     if (timeLeft === 0) {
       onTimesUp();
@@ -77,19 +78,19 @@ function formatTime(time) {
   return `${minutes}:${seconds}`;
 }
 
-function setRemainingPathColor(timeLeft) {
-  const {alert, warning, info} = COLOR_CODES;
-  if (timeLeft <= alert.threshold) {
+function setRemainingPathColor(timeLimit, timeLeft) {
+  const {info, warning, alert} = COLOR_CODES;
+  if (timeLeft/timeLimit <= info.threshold) {
     document
       .getElementById("base-timer-path-remaining")
       .classList.remove(warning.color);
     document
       .getElementById("base-timer-path-remaining")
-      .classList.add(alert.color);
-  } else if (timeLeft <= warning.threshold) {
+      .classList.add(info.color);
+  } else if (timeLeft/timeLimit <= warning.threshold) {
     document
       .getElementById("base-timer-path-remaining")
-      .classList.remove(info.color);
+      .classList.remove(alert.color);
     document
       .getElementById("base-timer-path-remaining")
       .classList.add(warning.color);
