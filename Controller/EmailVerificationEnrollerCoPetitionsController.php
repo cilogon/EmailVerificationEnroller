@@ -40,19 +40,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
   );
 
   /**
-   * Plugin functionality following finalize step
-   *
-   * @param   Integer  $id        CO Petition ID
-   * @param   Array    $onFinish  URL, in Cake format
-   */
-
-  protected function execute_plugin_finalize($id, $onFinish)
-  {
-    // Finished the updates. Return to the petition
-    $this->redirect($onFinish);
-  }
-
-  /**
    * Plugin functionality following tandcPetitioner step
    * We just send the Confirmation Email with the token. We want to interact with the user
    * presenting a form where s/he will add the code we just sent.
@@ -121,15 +108,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
         $pt['CoPetition']['co_enrollment_flow_id'])));
     }
 
-    // Should we continue or abort due to unsupported configuration
-
-    // Todo: When to fire. on none???
-    // Email verification is not required
-//    if ($ef["CoEnrollmentFlow"]["email_verification_mode"] != VerificationModeEnum::Review) {
-//      $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.verification.not.req'), LOG_DEBUG);
-//      $this->redirect($onFinish);
-//    }
-
     // Enrollment Authorization level is not supported
     $supported_authz_levels = array(EnrollmentAuthzEnum::AuthUser, EnrollmentAuthzEnum::None);
     if(!in_array($ef["CoEnrollmentFlow"]["authz_level"], $supported_authz_levels)) {
@@ -188,17 +166,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
           // Delete the verification code record from the database
           $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
-
-//          // We need to trick the CoPetition->updateStatus since it only allows transitioning
-//          // to Confirmed if we are coming from PendingConfirmation
-//          $this->CoPetition->id = $id;
-//          $this->CoPetition->saveField("status", PetitionStatusEnum::PendingConfirmation);
-//
-//          // Update the status of the petition to Confirmed
-//          $this->CoPetition->updateStatus($id,
-//                                          PetitionStatusEnum::Confirmed,
-//                                          $pt["EnrolleeCoPerson"]["id"],
-//                                          __METHOD__);
 
           $dbc->commit();
 
@@ -299,14 +266,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     if(!empty($email_verification_enroller["VerificationRequest"])) {
       $this->VerificationRequest->id = $email_verification_enroller["VerificationRequest"][0]['id'];
       $attemps = $this->VerificationRequest->field('attempts_count');
-//
-//      if($attemps > 2) {
-//        $this->VerificationRequest->delete($email_verification_enroller["VerificationRequest"][0]['id']);
-//        $this->Flash->set(_txt('er.verification_request.max.attempts'), array('key' => 'error'));
-//
-//        // For now redirect to home
-//        $this->redirect("/");
-//      }
 
       $data['attempts_count'] = $attemps + 1;
     }
