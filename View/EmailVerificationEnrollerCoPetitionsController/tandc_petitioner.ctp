@@ -37,6 +37,7 @@ $submit_label = _txt('op.submit');
 print $this->Form->create(
   $req,
   array(
+    'id' => 'verification-code-form',
     'inputDefaults' => array(
       'label' => false,
       'div' => false
@@ -50,7 +51,7 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 ?>
 
 <script type="text/javascript">
-  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 0.5?>;
+  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 1?>;
 
   $(document).ready(function() {
     if(seconds > 0.5) {
@@ -63,7 +64,7 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       $("#verification-code-card").show();
     }, seconds*1000);
 
-    $("#verification-code-submit").on("click", function() {
+    $("#verification-code-form").on("submit", function() {
       $("#verification-code-card").addClass('d-none');
       appendTimerToDocument(seconds)
       startTimer(seconds, seconds)
