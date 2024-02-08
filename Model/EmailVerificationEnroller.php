@@ -22,7 +22,7 @@
  *
  * @link          http://www.internet2.edu/comanage COmanage Project
  * @package       registry-plugin
- * @since         COmanage Registry v4.3.0
+ * @since         COmanage Registry v4.4.0
  * @license       Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 class EmailVerificationEnroller extends AppModel {
@@ -55,6 +55,20 @@ class EmailVerificationEnroller extends AppModel {
       'foreignKey' => 'verification_template_id'
     ),
   );
+
+  /**
+   * Actions to take before a validate operation is executed.
+   *
+   * @since  COmanage Registry v4.4.0
+   */
+
+  public function beforeValidate($options = array()) {
+    if(empty($this->data["EmailVerificationEnroller"]["verification_code_charset"])) {
+      $this->data["EmailVerificationEnroller"]["verification_code_charset"] = self::DEFAULT_CHARSET;
+    }
+
+    return parent::beforeValidate($options);
+  }
 
   public $hasMany = array(
     "EmailVerificationEnroller.VerificationRequest" => array('dependent' => true)
@@ -134,7 +148,7 @@ class EmailVerificationEnroller extends AppModel {
   /**
    * Determine if the string length can be divided by $num_of_chars.
    *
-   * @since  COmanage Registry v4.3.0
+   * @since  COmanage Registry v4.4.0
    * @param array  $check        Array of fields to validate
    * @param int    $num_of_chars Length multiplier
    * @return bool

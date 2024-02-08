@@ -21,7 +21,7 @@
  *
  * @link          https://www.internet2.edu/comanage COmanage Project
  * @package       registry
- * @since         COmanage Registry v4.3.0
+ * @since         COmanage Registry v4.4.0
  * @license       Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 

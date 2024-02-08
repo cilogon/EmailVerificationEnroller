@@ -21,7 +21,7 @@
  *
  * @link          http://www.internet2.edu/comanage COmanage Project
  * @package       registry-plugin
- * @since         COmanage Registry v4.3.0
+ * @since         COmanage Registry v4.4.0
  * @license       Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
@@ -33,8 +33,8 @@ global $cm_lang, $cm_texts;
 
 $cm_email_verification_enroller_texts['en_US'] = array(
   // Titles, per-controller
-  'ct.email_verification_enrollers.1'               => 'Email Verificiation Enroller',
-  'ct.email_verification_enrollers.pl'              => 'Email Verificiation Enrollers',
+  'ct.email_verification_enrollers.1'               => 'Email Verification Enroller',
+  'ct.email_verification_enrollers.pl'              => 'Email Verification Enrollers',
 
   // Error texts
   'er.verification_request.db.save'                 => 'Failed to save Verification Request',
@@ -44,9 +44,9 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
 
   // Fields
-  'fd.email_verification_enrollers.code.len'              => 'Verificiation Code Length',
-  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length.\nDefault length is 8.\nMinimum length is 4.\nMaximum is 20.\nLength step is 4.",
-  'fd.email_verification_enrollers.code.charset'          => 'Verificiation Code Character set',
+  'fd.email_verification_enrollers.code.len'              => 'Verification Code Length',
+  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length.\nDefault length is 8.",
+  'fd.email_verification_enrollers.code.charset'          => 'Verification Code Character set',
   'fd.email_verification_enrollers.code.charset.desc'     => 'Set the verification code character set. Check the <a href="https://github.com/cilogon/EmailVerificationEnroller/blob/main/README.md">documentation</a> for more details.',
   'fd.email_verification_enrollers.msg.templ'             => 'Message Template',
   'fd.email_verification_enrollers.msg.templ.desc'        => 'Select the Verification Message Template to send to the Enrollee',

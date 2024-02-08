@@ -21,7 +21,7 @@
  *
  * @link          http://www.internet2.edu/comanage COmanage Project
  * @package       registry-plugin
- * @since         COmanage Registry v4.3.0
+ * @since         COmanage Registry v4.4.0
  * @license       Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 -->
@@ -142,12 +142,20 @@ if($this->action != 'view') {
       <div class="field-desc"><?php print _txt('fd.email_verification_enrollers.code.charset.desc'); ?></div>
     </div>
     <div class="field-info">
-      <?php print ($e
-        ? $this->Form->input('verification_code_charset', array(
+      <?php
+      $verificationCodeCharset = filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_charset'],FILTER_SANITIZE_SPECIAL_CHARS);
+      if($e) {
+
+        print $this->Form->input('verification_code_charset', array(
           'maxlength' => 36,
-          'size' => 36
-        ))
-        : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_charset'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
+          'size' => 36,
+          'placeholder' => $vv_default_charset,
+          'value' => $verificationCodeCharset
+        ));
+      } else {
+        print filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_charset'],FILTER_SANITIZE_SPECIAL_CHARS);
+      }
+      ?>
     </div>
   </li>
   <li>
@@ -161,8 +169,9 @@ if($this->action != 'view') {
       <?php print ($e
         ? $this->Form->input('verification_code_length', array(
           'type' => 'number',
-          'min' => '1',
-          'max' => '20'
+          'min' => 4,
+          'step' => 4,
+          'max' => 20
         ))
         : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_length'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
     </div>

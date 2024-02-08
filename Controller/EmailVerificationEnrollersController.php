@@ -21,7 +21,7 @@
  *
  * @link          http://www.internet2.edu/comanage COmanage Project
  * @package       registry
- * @since         COmanage Registry v4.3.0
+ * @since         COmanage Registry v4.4.0
  * @license       Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
@@ -50,7 +50,7 @@ class EmailVerificationEnrollersController extends SEWController {
   /**
    * Callback before views are rendered.
    *
-   * @since  COmanage Registry v4.3.0
+   * @since  COmanage Registry v4.4.0
    */
 
   public function beforeRender() {
@@ -69,6 +69,8 @@ class EmailVerificationEnrollersController extends SEWController {
       $this->EmailVerificationEnroller->CoEnrollmentFlowVerMessageTemplate->find('list', $args)
     );
 
+    $this->set('vv_default_charset', EmailVerificationEnroller::DEFAULT_CHARSET);
+
     parent::beforeRender();
   }
 
@@ -78,7 +80,7 @@ class EmailVerificationEnrollersController extends SEWController {
    * - postcondition: $permissions set with calculated permissions
    *
    * @return Array Permissions
-   * @since  COmanage Registry v4.3.0
+   * @since  COmanage Registry v4.4.0
    */
 
   function isAuthorized()
@@ -111,7 +113,7 @@ class EmailVerificationEnrollersController extends SEWController {
    * Perform a redirect back to the controller's default view.
    * - postcondition: Redirect generated
    *
-   * @since  COmanage Registry v4.3.0
+   * @since  COmanage Registry v4.4.0
    */
 
   public function performRedirect()
