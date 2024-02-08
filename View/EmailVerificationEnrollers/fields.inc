@@ -78,6 +78,33 @@ if($this->action != 'view') {
 }
 ?>
 
+<script type="text/javascript">
+  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 1?>;
+
+  $(document).ready(function() {
+    // Allow only alphanumeric characters
+    $('#EmailVerificationEnrollerVerificationCodeCharset').bind('keypress', function (event) {
+      // Allow for regular characters and include these special few:
+      // comma, period, explanation point, new line
+      var regex = new RegExp("^[a-zA-Z0-9]+$");
+      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+      if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+      }
+    });
+    // We only allow upper case
+    $('#EmailVerificationEnrollerVerificationCodeCharset').on('keyup', function() {
+      $(this).val (function () {
+        let $value = this.value.toUpperCase();
+        let $arrayValue = Array.from(new Set($value.split('')));
+        return $arrayValue.join('');
+      }).trigger('change');
+    })
+  });
+
+</script>
+
 
 <ul id="<?php print $this->action; ?>_email_verification_enrollers" class="fields form-list">
   <li>
@@ -110,13 +137,33 @@ if($this->action != 'view') {
   <li>
     <div class="field-name">
       <div class="field-title">
+        <?php print ($e ? $this->Form->label('verification_code_charset', _txt('fd.email_verification_enrollers.code.charset')) : _txt('fd.email_verification_enrollers.code.charset')); ?>
+      </div>
+      <div class="field-desc"><?php print _txt('fd.email_verification_enrollers.code.charset.desc'); ?></div>
+    </div>
+    <div class="field-info">
+      <?php print ($e
+        ? $this->Form->input('verification_code_charset', array(
+          'maxlength' => 36,
+          'size' => 36
+        ))
+        : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_charset'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
+    </div>
+  </li>
+  <li>
+    <div class="field-name">
+      <div class="field-title">
         <?php print ($e ? $this->Form->label('verification_code_length', _txt('fd.email_verification_enrollers.code.len')) : _txt('fd.email_verification_enrollers.code.len')); ?>
       </div>
       <div class="field-desc"><?php print _txt('fd.email_verification_enrollers.code.len.desc'); ?></div>
     </div>
     <div class="field-info">
       <?php print ($e
-        ? $this->Form->input('verification_code_length', array('type' => 'number'))
+        ? $this->Form->input('verification_code_length', array(
+          'type' => 'number',
+          'min' => '1',
+          'max' => '20'
+        ))
         : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_length'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
     </div>
   </li>

@@ -45,7 +45,9 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
   // Fields
   'fd.email_verification_enrollers.code.len'              => 'Verificiation Code Length',
-  'fd.email_verification_enrollers.code.len.desc'         => 'Set the verification code length. Minimum/Default length is 8. Maximum is 20. Length step is 4.',
+  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length.\nDefault length is 8.\nMinimum length is 4.\nMaximum is 20.\nLength step is 4.",
+  'fd.email_verification_enrollers.code.charset'          => 'Verificiation Code Character set',
+  'fd.email_verification_enrollers.code.charset.desc'     => 'Set the verification code character set. Check the <a href="https://github.com/cilogon/EmailVerificationEnroller/blob/main/README.md">documentation</a> for more details.',
   'fd.email_verification_enrollers.msg.templ'             => 'Message Template',
   'fd.email_verification_enrollers.msg.templ.desc'        => 'Select the Verification Message Template to send to the Enrollee',
   'fd.email_verification_enrollers.validity'              => 'Verification Validity (Minutes)',
