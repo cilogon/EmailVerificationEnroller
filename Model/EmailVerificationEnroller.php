@@ -29,6 +29,8 @@ class EmailVerificationEnroller extends AppModel {
   // Required by COmanage Plugins
   public $cmPluginType = "enroller";
 
+  const DEFAULT_CHARSET = '234679CDFGHJKLMNPQRTVWXZ';
+  
   // Document foreign keys
   public $cmPluginHasMany = array(
     "CoEnrollmentFlowWedge" => "EmailVerificationEnroller",
@@ -84,6 +86,20 @@ class EmailVerificationEnroller extends AppModel {
         'allowEmpty' => true
       )
     ),
+    'verification_code_charset' => array(
+      'content' => array(
+        'rule' => 'alphaNumeric',
+        'required' => false,
+        'allowEmpty' => true,
+        'message' => 'Letters and numbers only',
+      ),
+      'isUpperCase' => array(
+        'rule' => array('isUpper'),
+        'required' => false,
+        'allowEmpty' => true,
+        'message' => array('Charset must consist of UPPER case characters only'),
+      )
+    ),
     'verification_code_length' => array(
       'content' => array(
         'rule' => 'numeric',
@@ -125,5 +141,61 @@ class EmailVerificationEnroller extends AppModel {
    */
   public function increaseStep($check, $num_of_chars) {
     return (int)$check["verification_code_length"]%$num_of_chars == 0;
+  }
+
+  /**
+   * Does the character set consist of only UPPER case characters
+   *
+   * @since  COmanage Registry v4.4.0
+   * @param array  $check        Array of fields to validate
+   * @return bool
+   */
+  public function isUpper($check) {
+    return ($check["verification_code_charset"] === strtoupper($check["verification_code_charset"]));
+  }
+
+  /**
+   * The character set used to generate the code should be configurable, with the following limitations:
+   *
+   * - Only numbers and letters should be allowed.
+   * - All letters must be upper case.
+   * - The "default" character set should be "234679CDFGHJKLMNPQRTVWXZ". This character set was chosen using the following criteria:
+   *   - No ambiguous characters, e.g., 1 (one), I (uppercase "eye"), and l (lowercase "el") look similar,
+   *     depending on the font used for rendering the text.
+   *   - All uppercase characters. The web browser will use JavaScript to automatically convert lowercase characters to uppercase,
+   *     e.g., oninput="this.value = this.value.toUpperCase();". Additionally, the web server will ensure all uppercase characters when the web form is submitted.
+   *   - No vowels. This reduces the possibility of generating offensive words.
+   *
+   * For readability, the code in the email may contain delimiters such as spaces or hyphens, but these extra characters
+   * would not need to be entered by the user, and would be allowed (but ignored) if they were entered. An example code: 3MS-PW9C
+   *
+   * @param   int    $len  Requested token length, not counting dashes inserted for readability every four characters
+   * @param   string $verficationCodeCharset Allowed set of characters
+   *
+   * @return string Token
+   * @throws \Random\RandomException
+   * @since  COmanage Registry v4.4.0
+   */
+
+  function generateRandomToken($len, $verficationCodeCharset) {
+    // If not defined use the defautl charset
+    $verficationCodeCharset = empty($verficationCodeCharset) ? self::DEFAULT_CHARSET : $verficationCodeCharset;
+
+    // Do not allow vowels regex "/[^-b-df-hj-np-tv-z0-9]+/"
+    $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(60))), 0, $len);
+
+    // Insert some dashes to improve readability
+    $dtoken = '';
+
+    for($i = 0, $iMax = strlen($token); $i < $iMax; $i++) {
+      $dtoken .= $token[$i];
+
+      if((($i + 1) % 4 == 0)
+        && ($i + 1 < strlen($token))) {
+        $dtoken .= '-';
+      }
+    }
+
+    return strtoupper($dtoken);
   }
 }

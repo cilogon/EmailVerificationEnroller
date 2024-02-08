@@ -42,6 +42,7 @@
       <constraint>REFERENCES cm_co_message_templates(id)</constraint>
     </field>
     <field name="verification_code_length" type="I" />
+    <field name="verification_code_charset" type="C" size="36" />
     <field name="verification_validity" type="I" />
     <field name="created" type="T" />
     <field name="modified" type="T" />

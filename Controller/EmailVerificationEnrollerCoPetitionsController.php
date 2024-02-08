@@ -55,14 +55,16 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     $args['conditions']['CoPetition.id'] = $id;
     $args['contain']['EnrolleeCoPerson'] = array(
       'EmailAddress',
-      'PrimaryName'
+      'PrimaryName' => array('conditions' => array('PrimaryName.primary_name' => true)),
     );
     $args['contain']['EnrolleeCoPerson']['CoPersonRole'][] = 'Cou';
-    $args['contain']['EnrolleeCoPerson']['CoPersonRole']['SponsorCoPerson'][] = 'PrimaryName';
+    $args['contain']['EnrolleeCoPerson']['CoPersonRole']['SponsorCoPerson'] = array(
+      'PrimaryName' => array('conditions' => array('PrimaryName.primary_name' => true)),
+    );
     $args['contain']['EnrolleeOrgIdentity'] = array(
       'EmailAddress',
       'OrgIdentitySourceRecord',
-      'PrimaryName'
+      'PrimaryName' => array('conditions' => array('PrimaryName.primary_name' => true)),
     );
 
     $pt = $this->CoPetition->find('first', $args);
@@ -237,7 +239,10 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       return;
     }
 
-    $verification_code = generateRandomToken($email_verification_enroller['EmailVerificationEnroller']["verification_code_length"] ?? 8);
+    $verification_code = $this->EmailVerificationEnroller->generateRandomToken(
+      $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? 8,
+      $email_verification_enroller['EmailVerificationEnroller']['verification_code_charset'] ?? null
+    );
 
     // Generate additional substitutions to supplement those handled by CoInvites.
     // This is separate from the substitutions managed by CoNotification.
