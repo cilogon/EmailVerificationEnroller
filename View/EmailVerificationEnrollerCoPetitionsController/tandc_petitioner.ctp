@@ -51,17 +51,22 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 ?>
 
 <script type="text/javascript">
-  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0)?>;
+  // Double each time
+  const seconds = Math.pow(2, <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0)?>);
 
   $(document).ready(function() {
     $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').bind('keypress', function (event) {
-      // Allow for regular characters and include these special few:
-      // comma, period, explanation point, new line
-      var regex = new RegExp("^[a-zA-Z0-9\-]+$");
-      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-      if (!regex.test(key)) {
-        event.preventDefault();
-        return false;
+      if (event.charCode === 13) {
+        $("#verification-code-form").submit();
+      } else {
+        // Allow for regular characters and include these special few:
+        // comma, period, explanation point, new line
+        var regex = new RegExp("^[a-zA-Z0-9\-]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+          event.preventDefault();
+          return false;
+        }
       }
     });
 
@@ -83,7 +88,14 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").val('').trigger('change');
     }, seconds*1000);
 
-    $("#verification-code-form").on("submit", function() {
+    $("#verification-code-form").on("submit", function(e) {
+      let submitedValue = $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').val();
+      if(submitedValue == '' || submitedValue == undefined) {
+        $('#co-loading').hide();
+        e.preventDefault();
+        return;
+      }
+
       $("#verification-code-card").addClass('d-none');
       appendTimerToDocument(seconds)
       startTimer(seconds, seconds)
