@@ -45,13 +45,13 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
   // Fields
   'fd.email_verification_enrollers.code.len'              => 'Verification Code Length',
-  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length.\nDefault length is 8.",
-  'fd.email_verification_enrollers.code.charset'          => 'Verification Code Character set',
-  'fd.email_verification_enrollers.code.charset.desc'     => 'Set the verification code character set. Check the <a href="https://github.com/cilogon/EmailVerificationEnroller/blob/main/README.md">documentation</a> for more details.',
+  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length. Default length is 8.",
+  'fd.email_verification_enrollers.code.charset'          => 'Verification Code Character Set',
+  'fd.email_verification_enrollers.code.charset.desc'     => 'Set of characters for generating the verification code. Numbers and uppercase letters only.',
   'fd.email_verification_enrollers.msg.templ'             => 'Message Template',
-  'fd.email_verification_enrollers.msg.templ.desc'        => 'Select the Verification Message Template to send to the Enrollee',
+  'fd.email_verification_enrollers.msg.templ.desc'        => 'Select the Verification Message Template to send to the Enrollee.',
   'fd.email_verification_enrollers.validity'              => 'Verification Validity (Minutes)',
-  'fd.email_verification_enrollers.validity.desc'         => 'When confirming an email address, the length of time (in minutes) the confirmation code is valid for (default is 8 hours = 480 minutes)',
+  'fd.email_verification_enrollers.validity.desc'         => 'The length of time (in minutes) the confirmation code is valid (default is 480 minutes = 8 hours)',
   'fd.email_verification_enrollers.verification.attemp'   => 'Verification attempt #%1$s',
 
   // Actions
@@ -64,5 +64,5 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
   // Verify Request
   'pl.verification_request.verify.title'      => 'Please Verify your Email Address',
-  'pl.verification_request.verify.mail'       => 'Enter the code we just send on your emai address <b class="text-danger">%1$s</b>',
+  'pl.verification_request.verify.mail'       => 'Enter the code sent to your emai address <b class="text-danger">%1$s</b>',
 );
