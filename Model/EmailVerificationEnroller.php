@@ -30,7 +30,8 @@ class EmailVerificationEnroller extends AppModel {
   public $cmPluginType = "enroller";
 
   const DEFAULT_CHARSET = '234679CDFGHJKLMNPQRTVWXZ';
-  
+  const DEFAULT_VERIFICATION_VALIDITY = 480;
+
   // Document foreign keys
   public $cmPluginHasMany = array(
     "CoEnrollmentFlowWedge" => "EmailVerificationEnroller",
@@ -65,6 +66,10 @@ class EmailVerificationEnroller extends AppModel {
   public function beforeValidate($options = array()) {
     if(empty($this->data["EmailVerificationEnroller"]["verification_code_charset"])) {
       $this->data["EmailVerificationEnroller"]["verification_code_charset"] = self::DEFAULT_CHARSET;
+    }
+
+    if(empty($this->data["EmailVerificationEnroller"]["verification_validity"])) {
+      $this->data["EmailVerificationEnroller"]["verification_validity"] = self::DEFAULT_VERIFICATION_VALIDITY;
     }
 
     return parent::beforeValidate($options);

@@ -185,7 +185,10 @@ if($this->action != 'view') {
     </div>
     <div class="field-info">
       <?php print ($e
-        ? $this->Form->input('verification_validity', array('type' => 'number'))
+        ? $this->Form->input('verification_validity', array(
+          'type' => 'number',
+          'placeholder' => $vv_default_verification_validity
+        ))
         : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_validity'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
     </div>
   </li>
