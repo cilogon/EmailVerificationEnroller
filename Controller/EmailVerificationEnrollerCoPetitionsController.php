@@ -148,8 +148,8 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
         $this->redirect("/");
       }
 
-      // Check the code
-      $verification_code_request = implode("-", $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["verification_code"]);
+      // Check the code for dashes and remove them
+      $verification_code_request = trim(str_replace('-', '', $this->request->data["EmailVerificationEnrollerCoPetitionsController"]["verification_code"]));
 
       // The verification code does not match
       // Create a Flash, send a new code and retry
@@ -239,7 +239,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       return;
     }
 
-    $verification_code = $this->EmailVerificationEnroller->generateRandomToken(
+    [$verification_code, $verification_code_dash] = $this->EmailVerificationEnroller->generateRandomToken(
       $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? 8,
       $email_verification_enroller['EmailVerificationEnroller']['verification_code_charset'] ?? null
     );
@@ -253,7 +253,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
         ? $pt['EnrolleeCoPerson']['CoPersonRole'][0]['Cou']['name'] : null),
       'SPONSOR'   => (!empty($pt['EnrolleeCoPerson']['CoPersonRole'][0]['SponsorCoPerson']['PrimaryName'])
         ? generateCn($pt['EnrolleeCoPerson']['CoPersonRole'][0]['SponsorCoPerson']['PrimaryName']) : null),
-      'TOKEN'     => $verification_code
+      'TOKEN'     => $verification_code_dash // Send the one with dashes for better readability
     );
 
     // Save to verification request
@@ -263,15 +263,16 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       "co_petition_id" => $id,
       'email_address_id' => $toEmail['id'],
       'attempts_count' => 1,
-      'verification_code' => $verification_code,
+      'verification_code' => $verification_code, // Save the code that contains no dashes
     );
 
     $this->VerificationRequest->clear();
 
     if(!empty($email_verification_enroller["VerificationRequest"])) {
       $this->VerificationRequest->id = $email_verification_enroller["VerificationRequest"][0]['id'];
-      $attemps = $this->VerificationRequest->field('attempts_count');
+      $attemps = (int)$this->VerificationRequest->field('attempts_count');
 
+      // We start from #1
       $data['attempts_count'] = $attemps + 1;
     }
 

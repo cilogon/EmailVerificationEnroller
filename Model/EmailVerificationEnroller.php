@@ -191,7 +191,7 @@ class EmailVerificationEnroller extends AppModel {
    * @param   int    $len  Requested token length, not counting dashes inserted for readability every four characters
    * @param   string $verficationCodeCharset Allowed set of characters
    *
-   * @return string Token
+   * @return array   [Token, Token with Dashes]
    * @throws \Random\RandomException
    * @since  COmanage Registry v4.4.0
    */
@@ -215,6 +215,6 @@ class EmailVerificationEnroller extends AppModel {
       }
     }
 
-    return strtoupper($dtoken);
+    return array(strtoupper($token), strtoupper($dtoken));
   }
 }

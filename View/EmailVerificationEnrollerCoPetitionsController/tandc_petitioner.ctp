@@ -51,9 +51,26 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 ?>
 
 <script type="text/javascript">
-  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0) * 1?>;
+  const seconds = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0)?>;
 
   $(document).ready(function() {
+    $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').bind('keypress', function (event) {
+      // Allow for regular characters and include these special few:
+      // comma, period, explanation point, new line
+      var regex = new RegExp("^[a-zA-Z0-9\-]+$");
+      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+      if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+      }
+    });
+
+    $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').on('keyup', function() {
+      $(this).val (function () {
+        return this.value.toUpperCase();
+      }).trigger('change');
+    })
+
     if(seconds > 0.5) {
       appendTimerToDocument(seconds)
       startTimer(seconds, seconds)
@@ -62,6 +79,8 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       // i should hide the boxes here and present the spinner by default
       $("#app-timer").hide()
       $("#verification-code-card").show();
+      $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").focus();
+      $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").val('').trigger('change');
     }, seconds*1000);
 
     $("#verification-code-form").on("submit", function() {
@@ -76,34 +95,22 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 <div id="verification-code-container" class="d-flex justify-content-center align-items-center container mt-n12">
   <div id="app-timer" class="display: none"></div>
   <div id="verification-code-card"
-       class="card py-5 px-3"
+       class="card py-5 px-3 mt-5 mt-sm-0"
        style="display: none">
-    <h5 class="m-0 text-center"><?php print _txt('pl.verification_request.verify.title');?></h5>
-    <span class="mobile-text"><?php print _txt('pl.verification_request.verify.mail', array($vv_to_email["mail"]));?></span>
-    <span class="mobile-text"><?php print _txt('fd.email_verification_enrollers.verification.attemp', array((int)($vv_verification_request[0]['attempts_count'] ?? 0)));?></span>
+    <h1 class="m-0 mb-2 text-center"><?php print _txt('pl.verification_request.verify.title');?></h1>
+    <p>
+      <span class="mobile-text"><?php print _txt('pl.verification_request.verify.mail', array($vv_to_email["mail"]));?></span>
+    </p>
+    <p>
+      <span class="mobile-text"><?php print _txt('pl.verification_request.verify.info');?></span>
+    </p>
     <div id="verification-code-input"
          class="d-flex flex-row mt-5 justify-content-center">
       <?php
-        $code_parts = (int)$vv_email_verification_enroller["verification_code_length"]/4;
-
-        for($i = 0; $i < $code_parts; $i++) {
-          $options = array(
-            'type' => 'text',
-            'class' => "",
-            'size' => 4,
-            'maxLength' => 4);
-
-          if($i === 0) {
-            $options['class'] .= 'focusFirst';
-          }
-
-          if($i > 0) {
-            print $this->Html->tag('span', '-', array('class' => 'mx-2'));
-          }
-
-          print $this->Form->label( $req . '.verification_code.' . $i, "verification code part", array("class" => "visually-hidden"));
-          print $this->Form->input( $req . '.verification_code.' . $i, $options);
-        }
+        print $this->Form->label('verification_code', _txt('pl.verification_request.verify.label'), array(
+          'class' => 'my-auto mr-2 mobile-text'
+        ));
+        print $this->Form->input('verification_code', array('type' => 'text'));
       ?>
     </div>
     <div id="verification-code-submit"
@@ -112,8 +119,10 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       print $this->Form->submit($submit_label);
       print $this->Form->end();
       ?>
-<!--      <span class="d-block mobile-text">Don't receive the code?</span>-->
-<!--      <span class="font-weight-bold text-danger cursor">Resend</span>-->
+
     </div>
+    <?php if((int)($vv_verification_request[0]['attempts_count']) > 1): ?>
+      <span class="font-weight-bold text-danger cursor mt-2"><?php print _txt('fd.email_verification_enrollers.verification.failed')?></span>
+    <?php endif; ?>
   </div>
 </div>
