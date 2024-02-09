@@ -121,7 +121,8 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       ?>
 
     </div>
-    <?php if((int)($vv_verification_request[0]['attempts_count']) > 1): ?>
+    <?php if(isset($vv_verification_request[0]['attempts_count'])
+             && (int)($vv_verification_request[0]['attempts_count']) > 0): ?>
       <span class="font-weight-bold text-danger cursor mt-2"><?php print _txt('fd.email_verification_enrollers.verification.failed')?></span>
     <?php endif; ?>
   </div>
