@@ -44,8 +44,9 @@ $cm_email_verification_enroller_texts['en_US'] = array(
 
 
   // Fields
+  'fd.email_verification_enrollers.verification.failed'   => 'Invalid Code. Please try again.',
   'fd.email_verification_enrollers.code.len'              => 'Verification Code Length',
-  'fd.email_verification_enrollers.code.len.desc'         => "Set the verification code length. Default length is 8.",
+  'fd.email_verification_enrollers.code.len.desc'         => 'Set the verification code length. Default length is 8.',
   'fd.email_verification_enrollers.code.charset'          => 'Verification Code Character Set',
   'fd.email_verification_enrollers.code.charset.desc'     => 'Set of characters for generating the verification code. Numbers and uppercase letters only.',
   'fd.email_verification_enrollers.msg.templ'             => 'Message Template',
@@ -63,6 +64,8 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'pl.email_verification_enrollers.verif.review'         => 'not supported if verification mode is not review',
 
   // Verify Request
-  'pl.verification_request.verify.title'      => 'Please Verify your Email Address',
-  'pl.verification_request.verify.mail'       => 'Enter the code sent to your emai address <b class="text-danger">%1$s</b>',
+  'pl.verification_request.verify.info'       => 'DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE. If you have problems, please open a Help Ticket at <a href="https://support.access-ci.org/open-a-ticket">https://support.access-ci.org/open-a-ticket</a>.',
+  'pl.verification_request.verify.label'      => 'Enter Code:',
+  'pl.verification_request.verify.mail'       => 'An email has been sent to <b class="text-danger">%1$s</b> containing an alphanumeric code. If you do not receive the email in your Inbox, check your Spam/Junk folder.',
+  'pl.verification_request.verify.title'      => 'Enter Code to Verify Your Email Address',
 );

@@ -72,7 +72,7 @@
     <field name="co_enrollment_flow_wedge_id" type="I">
       <constraint>REFERENCES cm_co_enrollment_flow_wedges(id)</constraint>
     </field>
-    <field name="verification_code" type="C" size="40" />
+    <field name="verification_code" type="C" size="20" />
     <field name="email_address_id" type="I">
       <constraint>REFERENCES cm_email_addresses(id)</constraint>
     </field>

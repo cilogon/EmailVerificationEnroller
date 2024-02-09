@@ -79,17 +79,17 @@ class VerificationRequest extends AppModel {
         'last' => 'true',
       ),
       'maxLength' => array(
-        'rule' => array('maxLength', 25),
+        'rule' => array('maxLength', 20),
         'required' => true,
         'allowEmpty' => false,
         'message' => array('Code length must not exceed 20 characters.'),
         'last' => 'true',
       ),
       'minLength' => array(
-        'rule' => array('minLength', 9),
+        'rule' => array('minLength', 4),
         'required' => true,
         'allowEmpty' => false,
-        'message' => array('Code length must not be less than 8 characters.'),
+        'message' => array('Code length must not be less than 4 characters.'),
         'last' => 'true',
       ),
     )
