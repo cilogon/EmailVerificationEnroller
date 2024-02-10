@@ -239,10 +239,19 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       return;
     }
 
-    [$verification_code, $verification_code_dash] = $this->EmailVerificationEnroller->generateRandomToken(
-      $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? 8,
-      $email_verification_enroller['EmailVerificationEnroller']['verification_code_charset'] ?? null
-    );
+    $verification_code = null;
+    $verification_code_dash = null;
+    // Only create a new code/token if we do not already have one
+    if(empty($email_verification_enroller["VerificationRequest"])) {
+      [$verification_code, $verification_code_dash] = $this->EmailVerificationEnroller->generateRandomToken(
+        $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? 8,
+        $email_verification_enroller['EmailVerificationEnroller']['verification_code_charset'] ?? null
+      );
+    }
+
+    // Do we have a token or not?
+    $verification_code = $verification_code ?? $email_verification_enroller["VerificationRequest"][0]['verification_code'];
+    $verification_code_dash = $verification_code_dash ?? $this->EmailVerificationEnroller->tokenToD($email_verification_enroller["VerificationRequest"][0]['verification_code']);
 
     // Generate additional substitutions to supplement those handled by CoInvites.
     // This is separate from the substitutions managed by CoNotification.
@@ -281,11 +290,13 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       throw new RuntimeException(_txt('er.verification_request.db.save'));
     }
 
-    // Sent the email
-    $this->CoMessageTemplate->templateSend($email_verification_enroller['EmailVerificationEnroller']["verification_template_id"],
-                                           $toEmail['mail'],
-                                           $subs);
+    if( $data['attempts_count'] == 1) {
+      // Sent the email only the first time
+      $this->CoMessageTemplate->templateSend($email_verification_enroller['EmailVerificationEnroller']["verification_template_id"],
+                                             $toEmail['mail'],
+                                             $subs);
 
+    }
 
     // Render the add code view
 

@@ -51,8 +51,22 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 ?>
 
 <script type="text/javascript">
+  function reset() {
+    $("#app-timer").hide()
+    $("#verification-code-card").show();
+    $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").focus();
+    $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").val('').trigger('change');
+  }
+
   // Double each time
-  const seconds = Math.pow(2, <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0)?>);
+  const attemp = <?php print (int)($vv_verification_request[0]['attempts_count'] ?? 0)?>;
+  const seconds = Math.pow(2, attemp);
+
+  $("#verification-code-form").ready(function() {
+    if(attemp < 1) {
+      $(this).show()
+    }
+  })
 
   $(document).ready(function() {
     $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').bind('keypress', function (event) {
@@ -76,17 +90,16 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
       }).trigger('change');
     })
 
-    if(seconds > 0.5) {
+    if(attemp > 0) {
       appendTimerToDocument(seconds)
       startTimer(seconds, seconds)
+
+      setTimeout(() => {
+        reset()
+      }, seconds*1000);
+    } else {
+      reset()
     }
-    setTimeout(() => {
-      // i should hide the boxes here and present the spinner by default
-      $("#app-timer").hide()
-      $("#verification-code-card").show();
-      $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").focus();
-      $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").val('').trigger('change');
-    }, seconds*1000);
 
     $("#verification-code-form").on("submit", function(e) {
       let submitedValue = $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').val();

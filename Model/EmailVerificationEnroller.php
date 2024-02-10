@@ -204,6 +204,23 @@ class EmailVerificationEnroller extends AppModel {
     $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(60))), 0, $len);
 
     // Insert some dashes to improve readability
+    $dtoken = $this->tokenToD($token);
+
+    return array(strtoupper($token), strtoupper($dtoken));
+  }
+
+  /**
+   * The character set used to generate the code should be configurable, with the following limitations:
+   *
+   * @param   string $token Token string
+   *
+   * @return  string        Token in human-readable form, added a dash every 4 characters
+   * @throws \Random\RandomException
+   * @since  COmanage Registry v4.4.0
+   */
+
+  function tokenToD($token) {
+    // Insert some dashes to improve readability
     $dtoken = '';
 
     for($i = 0, $iMax = strlen($token); $i < $iMax; $i++) {
@@ -215,6 +232,6 @@ class EmailVerificationEnroller extends AppModel {
       }
     }
 
-    return array(strtoupper($token), strtoupper($dtoken));
+    return $dtoken;
   }
 }
