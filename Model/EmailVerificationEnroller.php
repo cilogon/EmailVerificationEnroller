@@ -196,12 +196,12 @@ class EmailVerificationEnroller extends AppModel {
    * @since  COmanage Registry v4.4.0
    */
 
-  function generateRandomToken($len, $verficationCodeCharset) {
+  public function generateRandomToken($len, $verficationCodeCharset) {
     // If not defined use the defautl charset
     $verficationCodeCharset = empty($verficationCodeCharset) ? self::DEFAULT_CHARSET : $verficationCodeCharset;
 
     // Do not allow vowels regex "/[^-b-df-hj-np-tv-z0-9]+/"
-    $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(60))), 0, $len);
+    $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(500))), 0, $len);
 
     // Insert some dashes to improve readability
     $dtoken = $this->tokenToD($token);
@@ -219,7 +219,7 @@ class EmailVerificationEnroller extends AppModel {
    * @since  COmanage Registry v4.4.0
    */
 
-  function tokenToD($token) {
+  public function tokenToD($token) {
     // Insert some dashes to improve readability
     $dtoken = '';
 
