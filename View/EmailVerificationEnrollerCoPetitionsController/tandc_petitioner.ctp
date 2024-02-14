@@ -135,7 +135,10 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
         print $this->Form->label('verification_code', _txt('pl.verification_request.verify.label'), array(
           'class' => 'my-auto mr-2 mobile-text'
         ));
-        print $this->Form->input('verification_code', array('type' => 'text'));
+        print $this->Form->input('verification_code', array(
+          'type' => 'text',
+          'size' => 24
+        ));
       ?>
     </div>
     <div id="verification-code-submit"
