@@ -40,7 +40,7 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'er.verification_request.db.save'                 => 'Failed to save Verification Request',
   'er.verification_request.code.validation'         => 'Verification Code does not match',
   'er.verification_request.max.attempts'            => 'Max verification attempts exceeded',
-  'er.verification_request.validity.exc'            => 'Verification Validity time window exceeded',
+  'er.verification_request.validity.exc'            => 'Verification validity time window exceeded',
 
 
   // Fields
@@ -64,8 +64,8 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'pl.email_verification_enrollers.verif.review'         => 'not supported if verification mode is not review',
 
   // Verify Request
-  'pl.verification_request.verify.info'       => 'DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE. If you have problems, please open a Help Ticket at <a href="https://support.access-ci.org/open-a-ticket">https://support.access-ci.org/open-a-ticket</a>.',
+  'pl.verification_request.verify.info'       => 'DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE. If you have problems, please <a target="_blank" href="https://identity.access-ci.org/help">Open a Help Ticket</a>.',
   'pl.verification_request.verify.label'      => 'Enter Code:',
-  'pl.verification_request.verify.mail'       => 'An email has been sent to <b class="text-danger">%1$s</b> containing an alphanumeric code. If you do not receive the email in your Inbox, check your Spam/Junk folder.',
+  'pl.verification_request.verify.mail'       => 'An email was sent to <b class="text-danger">%1$s</b> containing an alphanumeric code. If you do not receive the email in your Inbox, check your Spam/Junk folder.',
   'pl.verification_request.verify.title'      => 'Enter Code to Verify Your Email Address',
 );
