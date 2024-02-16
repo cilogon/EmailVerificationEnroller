@@ -64,7 +64,7 @@ $cm_email_verification_enroller_texts['en_US'] = array(
   'pl.email_verification_enrollers.verif.review'         => 'not supported if verification mode is not review',
 
   // Verify Request
-  'pl.verification_request.verify.info'       => 'DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE. If you have problems, please <a target="_blank" href="https://identity.access-ci.org/help">Open a Help Ticket</a>.',
+  'pl.verification_request.verify.info'       => 'DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE.',
   'pl.verification_request.verify.label'      => 'Enter Code:',
   'pl.verification_request.verify.mail'       => 'An email was sent to <b class="text-danger">%1$s</b> containing an alphanumeric code. If you do not receive the email in your Inbox, check your Spam/Junk folder.',
   'pl.verification_request.verify.title'      => 'Enter Code to Verify Your Email Address',
