@@ -70,6 +70,7 @@ class EmailVerificationEnrollersController extends SEWController {
     );
 
     $this->set('vv_default_charset', EmailVerificationEnroller::DEFAULT_CHARSET);
+    $this->set('vv_default_code_length', EmailVerificationEnroller::DEFAULT_CODE_LENGTH);
     $this->set('vv_default_verification_validity', EmailVerificationEnroller::DEFAULT_VERIFICATION_VALIDITY);
 
     parent::beforeRender();

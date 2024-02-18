@@ -244,7 +244,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
     // Only create a new code/token if we do not already have one
     if(empty($email_verification_enroller["VerificationRequest"])) {
       [$verification_code, $verification_code_dash] = $this->EmailVerificationEnroller->generateRandomToken(
-        $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? 8,
+        $email_verification_enroller['EmailVerificationEnroller']['verification_code_length'] ?? null,
         $email_verification_enroller['EmailVerificationEnroller']['verification_code_charset'] ?? null
       );
     }

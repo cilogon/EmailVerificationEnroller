@@ -30,6 +30,7 @@ class EmailVerificationEnroller extends AppModel {
   public $cmPluginType = "enroller";
 
   const DEFAULT_CHARSET = '234679CDFGHJKLMNPQRTVWXZ';
+  const DEFAULT_CODE_LENGTH = 8;
   const DEFAULT_VERIFICATION_VALIDITY = 480;
 
   // Document foreign keys
@@ -66,6 +67,10 @@ class EmailVerificationEnroller extends AppModel {
   public function beforeValidate($options = array()) {
     if(empty($this->data["EmailVerificationEnroller"]["verification_code_charset"])) {
       $this->data["EmailVerificationEnroller"]["verification_code_charset"] = self::DEFAULT_CHARSET;
+    }
+
+    if(empty($this->data["EmailVerificationEnroller"]["verification_code_length"])) {
+      $this->data["EmailVerificationEnroller"]["verification_code_length"] = self::DEFAULT_CODE_LENGTH;
     }
 
     if(empty($this->data["EmailVerificationEnroller"]["verification_validity"])) {
@@ -188,7 +193,7 @@ class EmailVerificationEnroller extends AppModel {
    * For readability, the code in the email may contain delimiters such as spaces or hyphens, but these extra characters
    * would not need to be entered by the user, and would be allowed (but ignored) if they were entered. An example code: 3MS-PW9C
    *
-   * @param   int    $len  Requested token length, not counting dashes inserted for readability every four characters
+   * @param   int    $verificationCodeLength  Requested token length, not counting dashes inserted for readability every four characters
    * @param   string $verficationCodeCharset Allowed set of characters
    *
    * @return array   [Token, Token with Dashes]
@@ -196,12 +201,14 @@ class EmailVerificationEnroller extends AppModel {
    * @since  COmanage Registry v4.4.0
    */
 
-  public function generateRandomToken($len, $verficationCodeCharset) {
-    // If not defined use the defautl charset
+  public function generateRandomToken($verificationCodeLength, $verficationCodeCharset) {
+    // If not defined use the default code length
+    $verificationCodeLength = empty($verificationCodeLength) ? self::DEFAULT_CODE_LENGTH : $verificationCodeLength;
+
+    // If not defined use the default charset
     $verficationCodeCharset = empty($verficationCodeCharset) ? self::DEFAULT_CHARSET : $verficationCodeCharset;
 
-    // Do not allow vowels regex "/[^-b-df-hj-np-tv-z0-9]+/"
-    $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(500))), 0, $len);
+    $token = substr(preg_replace("/[^-{$verficationCodeCharset}]+/", '', base64_encode(random_bytes(500))), 0, $verificationCodeLength);
 
     // Insert some dashes to improve readability
     $dtoken = $this->tokenToD($token);

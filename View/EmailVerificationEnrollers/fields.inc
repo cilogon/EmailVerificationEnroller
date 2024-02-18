@@ -171,7 +171,8 @@ if($this->action != 'view') {
           'type' => 'number',
           'min' => 4,
           'step' => 4,
-          'max' => 20
+          'max' => 20,
+          'placeholder' => $vv_default_code_length
         ))
         : filter_var($email_verification_enrollers[0]['EmailVerificationEnroller']['verification_code_length'],FILTER_SANITIZE_SPECIAL_CHARS)); ?>
     </div>
