@@ -5,7 +5,7 @@
 This is an Enrollment Flow Wedge meant to replace the standard
 email verification method during an enrollment flow.
 
-The standard email verification method send an email containing a
+The standard email verification method sends an email containing a
 link which verifies that the user controls the email address and
 also resumes the enrollment flow. The EmailVerificationEnroller
 wedge sends the user an email containing a alphanumeric code which
@@ -15,7 +15,7 @@ verification email can contain zero hyperlinks which sometimes
 cause recipient mail systems to classify the verification email as
 spam. Second, the enrollment flow remains in the current web
 browser session instead of stopping and resuming in a second
-session like the default email verification.
+session as with default email verification.
 
 ## Installation
 
@@ -64,17 +64,19 @@ configured using the standard email verification method.
     button for the newly added Enrollment Flow Wedge.
 1.  Configure the Enrollment Flow Wedge.
     - Set the Verification Email Message Template to the "Email
-      verification via Code" template you created earlier.
-    - The rest of the fields can be left as is in order to accept
+      verification via Code" template created earlier.
+    - The rest of the fields can be left untouched in order to accept
       the default values. Or you can change the values as you like.
     - The default Verification Code Set does not contain
-      ambiguous characters (e.g. one '1', uppercase 'I', lowercase
-      'l'), or vowels (to reduce the possibility of offensive words).
+      ambiguous characters (e.g. one `1`, uppercase `I`, lowercase
+      `l`), or vowels (to reduce the possibility of offensive words).
       The code set allows only uppercase letters and numbers.
     - The default Verification code length is 8, but can be
-      configured to 4, 8, 12, 16, or 20.
-    - The default Verification Validity (in Minutes) is 480 (8
-      hours), but can be set to any positive number.
+      configured to 4, 8, 12, 16, or 20. Hyphens will be added to
+      the code every 4 characters for readability (but are not
+      required to be entered by the user).
+    - The default Verification Validity is 480 minutes (8 hours),
+      but can be set to any positive number.
     - Click the SAVE button.
 1.  Use the Breadcrumbs to navigate back to the Enrollment Flow.
     - Set Email Confirmation Mode to None. The Wedge will then be
@@ -83,4 +85,18 @@ configured using the standard email verification method.
        is not used when the Wedge is active.
     - Set the Finalization Redirect URL if desired.
     - Click the SAVE button.
-
+1.  (OPTIONAL) Change the default warning message in the "Enter
+    Code to Verify Your Email Address" web form page. Select
+    Configuration from the left naviation column.
+1.  Select Localizations.
+1.  Click Add Localization.
+1.  Configure the Localization.
+    - Set the Key to pl.verification\_request.verify.info
+    - Set the Language to en\_US.
+    - Enter the Text such as:
+    ```
+    DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE.
+    If you have problems, please
+    <a target="_blank" href="https://identity.access-ci.org/help">Open a Help Ticket</a>.
+    ```
+    - Click the SAVE button.
