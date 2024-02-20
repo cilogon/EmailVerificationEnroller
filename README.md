@@ -60,8 +60,6 @@ configured using the standard email verification method.
     -  Set the Status to Active.
     -  Set the Order to 1.
     -  Click the ADD button.
-1.  Back on the Enrollment Flow Wedges page, click the Configure
-    button for the newly added Enrollment Flow Wedge.
 1.  Configure the Enrollment Flow Wedge.
     - Set the Verification Email Message Template to the "Email
       verification via Code" template created earlier.
