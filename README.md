@@ -27,7 +27,7 @@ Install the plugin as you would any
 These instructions assume you already have an enrollment flow
 configured using the standard email verification method.
 
-1.  Select Configuration from the left naviation column.
+1.  Select Configuration from the left navigation column.
 1.  Select Message Templates.
 1.  Click the "Add Message Template" link.
 1.  Configure the Message Template.
@@ -81,7 +81,7 @@ configured using the standard email verification method.
 1.  Use the Breadcrumbs to navigate back to the Enrollment Flow.
     - Set Email Confirmation Mode to None. The Wedge will then be
       used.
-    - Remove any text in the Confirmatikon Redirect URL field. It
+    - Remove any text in the Confirmation Redirect URL field. It
        is not used when the Wedge is active.
     - Set the Finalization Redirect URL if desired.
     - Click the SAVE button.
