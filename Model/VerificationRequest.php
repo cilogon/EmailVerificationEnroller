@@ -33,7 +33,7 @@ class VerificationRequest extends AppModel {
   public $belongsTo = array(
     "EmailVerificationEnroller.EmailVerificationEnroller",
     "CoEnrollmentFlowWedge",
-    "CoPetition".
+    "CoPetition",
     "EmailAddress"
   );
 
