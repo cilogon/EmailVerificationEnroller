@@ -84,7 +84,7 @@ configured using the standard email verification method.
 ### Reconfigure the Enrollment Flow if necessary
 
 1.  Use the Breadcrumbs to navigate back to the Enrollment Flow.
-    Reconfigure the Enrollment Flow as follows.
+1.  Reconfigure the Enrollment Flow as follows.
     - Set "Email Confirmation Mode" to "None". The Wedge will be used
       instead.
     - Remove any text in the "Confirmation Redirect URL" field.
