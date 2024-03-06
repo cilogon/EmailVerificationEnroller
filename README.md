@@ -9,7 +9,7 @@ The standard email verification method sends an email containing a
 link which verifies that the user controls the email address and
 also resumes the enrollment flow. The EmailVerificationEnroller
 wedge sends the user an email containing a alphanumeric code which
-must be entered into the web browser to continue the enrollment
+must be entered into the web browser to continue the existing enrollment
 flow. This has two advantages. First, the email template for the
 verification email can contain zero hyperlinks which sometimes
 cause recipient mail systems to classify the verification email as
@@ -44,7 +44,7 @@ configured using the standard email verification method.
     <p>Here is your code:</p>
     <p style="margin-left:50px;font:bold 1.5em monospace">(@TOKEN)</p>
     <p>Please enter this code on the web page to continue the registration process.</p>
-    <p>DO NOT CLOSE YOUR WEB BROWSER UNTIL THE REGISTRATION PROCESS IS COMPLETE. </p>
+    <p>DO NOT CLOSE YOUR WEB BROWSER UNTIL THE REGISTRATION PROCESS IS COMPLETE.</p>
     <p>Thank you,</p>
     <p>Registry Team</p>
     ```
@@ -111,9 +111,10 @@ configured using the standard email verification method.
 ### Set EnvSource plugin mode to Authenticate
 
 If your Enrollment Flow has an attached Organizational Identity Source
-which uses the "EnvSource" plugin, update the "Org Identity MOde" to
-"Authenticate"
-(see [Enrollment Sources](https://spaces.at.internet2.edu/display/COmanage/Enrollment+Sources) for more information). 
+which uses the "EnvSource" plugin, update the "Org Identity Mode" to
+"Authenticate".
+(See [Enrollment Sources](https://spaces.at.internet2.edu/display/COmanage/Enrollment+Sources)
+for more information.)
 
 1.  Select "Configuration" from the left navigation column.
 1.  Select "Enrollment Flows".
