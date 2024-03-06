@@ -19,7 +19,7 @@ session as with default email verification.
 
 ## Installation
 
-Install the plugin as you would any 
+Install the plugin as you would any
 [COmanage Registry plugin](https://spaces.at.internet2.edu/x/ZwEZBg).
 
 ## Configuration
@@ -35,7 +35,7 @@ configured using the standard email verification method.
     - Set Message Context to Enrollment Flow Verification.
     - Set Message Subject such as "Please verify your registration
       email".
-    - Set Message Format to Plain Text and HTML. 
+    - Set Message Format to Plain Text and HTML.
     - Enter Message Body such as:
     ```
     <p>Hello (@CO_PERSON),</p>
@@ -50,12 +50,11 @@ configured using the standard email verification method.
     - Click the SAVE button.
 1.  Select Configuration from the left naviation column.
 1.  Select Enrollment Flows.
-1.  Click the "Edit" button for the enrollment flow. 
+1.  Click the "Edit" button for the enrollment flow.
 1.  Click the "Attach Enrollment Flow Wedges" link.
 1.  Click the "Add Enrollment Flow Wedge" link.
 1.  Configure the Enrollment Flow Wedge.
-    -  Enter a description such as "Email Verification Using
-    Code".
+    -  Enter a description such as "Email Verification Using Code".
     -  Set the Plugin drop-down to EmailVerificationEnroller.
     -  Set the Status to Active.
     -  Set the Order to 1.
@@ -80,21 +79,23 @@ configured using the standard email verification method.
     - Set Email Confirmation Mode to None. The Wedge will then be
       used.
     - Remove any text in the Confirmation Redirect URL field. It
-       is not used when the Wedge is active.
+      is not used when the Wedge is active.
     - Set the Finalization Redirect URL if desired.
     - Click the SAVE button.
 1.  (OPTIONAL) Change the default warning message in the "Enter
-    Code to Verify Your Email Address" web form page. Select
-    Configuration from the left naviation column.
-1.  Select Localizations.
-1.  Click Add Localization.
-1.  Configure the Localization.
-    - Set the Key to pl.verification\_request.verify.info
-    - Set the Language to en\_US.
-    - Enter the Text such as:
-    ```
-    DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE.
-    If you have problems, please
-    <a target="_blank" href="https://identity.access-ci.org/help">Open a Help Ticket</a>.
-    ```
-    - Click the SAVE button.
+    Code to Verify Your Email Address" web form page.
+    1.  Select `Configuration` from the left navigation column.
+    1.  Select `Localizations`.
+    1.  Click `Add Localization`.
+    1.  Configure the Localization.
+        - Set the Key to pl.verification\_request.verify.info
+        - Set the Language to en\_US.
+        - Enter the Text such as:
+        ```
+        DO NOT CLOSE YOUR BROWSER OR NAVIGATE AWAY FROM THIS PAGE.
+        If you have problems, please
+        <a target="_blank" href="https://identity.access-ci.org/help">Open a Help Ticket</a>.
+        ```
+        - Click the SAVE button.
+1. ENVSource plugin Configuration
+    - Set Enrollment Source [Mode](https://spaces.at.internet2.edu/display/COmanage/Enrollment+Sources) to `Authenticate` 
