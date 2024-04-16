@@ -117,13 +117,6 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
       $this->redirect($onFinish);
     }
 
-    // Not supported if approval mode is enabled
-    if($ef["CoEnrollmentFlow"]["approval_required"] === true) {
-      $this->log(__METHOD__ . "::message " . _txt('pl.email_verification_enrollers.appr.req'), LOG_DEBUG);
-      $this->redirect($onFinish);
-    }
-
-
     $is_post = false;
     // We have a verification request for this petition that waits to be served
     if ($this->request->is('post')) {
