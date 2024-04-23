@@ -1,6 +1,6 @@
 <?php
 /**
- * COmanage Registry tandc Petitioner Fields (used to display both petitions and petition-based invitations)
+ * COmanage Registry petitionerAttribute Petitioner Fields (used to display both petitions and petition-based invitations)
  *
  * Portions licensed to the University Corporation for Advanced Internet
  * Development, Inc. ("UCAID") under one or more contributor license agreements.
@@ -26,7 +26,7 @@
  */
 
 
-$this->Html->css('EmailVerificationEnroller.tandc_petitioner', array('inline' => false));
+$this->Html->css('EmailVerificationEnroller.petitioner_attributes', array('inline' => false));
 $this->Html->script('EmailVerificationEnroller.timer', array('inline' => false));
 
 

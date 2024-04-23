@@ -40,7 +40,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
   );
 
   /**
-   * Plugin functionality following tandcPetitioner step
+   * Plugin functionality following petitionerAttributes step
    * We just send the Confirmation Email with the token. We want to interact with the user
    * presenting a form where s/he will add the code we just sent.
    *
@@ -48,7 +48,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
    * @param   Array    $onFinish  URL, in Cake format
    */
 
-  protected function execute_plugin_tandcPetitioner($id, $onFinish) {
+  protected function execute_plugin_petitionerAttributes($id, $onFinish) {
     // Just let any exceptions fall through
 
     $args = array();
@@ -165,7 +165,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
           $dbc->commit();
 
           // Continue
-          $this->redirect($this->generateDoneRedirect('tandcPetitioner', $id, $efwid));
+          $this->redirect($this->generateDoneRedirect('petitionerAttributes', $id, $efwid));
         } catch (Exception $e) {
           $dbc->rollback();
           $this->log(__METHOD__ . "::message " . _txt('er.db.save'), LOG_ERROR);
