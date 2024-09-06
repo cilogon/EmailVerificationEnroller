@@ -52,7 +52,7 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
 
 <script type="text/javascript">
   function reset() {
-    $("#app-timer").hide()
+    $("#app-timer").hide();
     $("#verification-code-card").show();
     $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").focus();
     $("#EmailVerificationEnrollerCoPetitionsControllerVerificationCode").val('').trigger('change');
@@ -69,6 +69,13 @@ print $this->Form->hidden('co_enrollment_flow_wedge_id', array('default' => $vv_
   })
 
   $(document).ready(function() {
+    // CIL-2083 Prevent basic 'back'/'forward' button use
+    // See https://stackoverflow.com/a/25665232 , 'Update' version
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+      history.pushState(null, null, document.URL);
+    });
+
     $('#EmailVerificationEnrollerCoPetitionsControllerVerificationCode').bind('keypress', function (event) {
       if (event.charCode === 13) {
         $("#verification-code-form").submit();
