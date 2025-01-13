@@ -33,6 +33,7 @@ class EmailVerificationEnrollerCoPetitionsController extends CoPetitionsControll
 
   public $uses = array(
     "CoPetition",
+    "AttributeEnumeration",
     "EmailVerificationEnroller.EmailVerificationEnroller",
     "CoMessageTemplate",
     "EmailVerificationEnroller.VerificationRequest",
